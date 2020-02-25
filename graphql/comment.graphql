@@ -1,0 +1,21 @@
+type Comment {
+    id: ID!
+    post: Post! @belongsTo
+    comment: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+extend type Query {
+    comments(
+        first: Int!
+        page: Int
+        post_id: Int! @where(operator: "=")
+    ): [Comment!]! @paginate
+    # comments: [Comment!]! @paginate(defaultCount: 10)
+    comment(id: ID @eq): Comment @find
+}
+
+extend type Mutation {
+    addComment(post_id: Int, comment: String!): Comment @create
+}
